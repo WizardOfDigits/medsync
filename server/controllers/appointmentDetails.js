@@ -14,7 +14,7 @@ export const createAppointmentHandler = async (req, res) => {
     planName,
     referralInformation,
     appointmentDetails,
-    ReasonForVisit,
+    reasonForVisit,
     previousVisitDetails,
     specialRequirements,
   } = req.body;
@@ -33,12 +33,17 @@ export const createAppointmentHandler = async (req, res) => {
       planName,
       referralInformation,
       appointmentDetails,
-      ReasonForVisit,
+      reasonForVisit,
       previousVisitDetails,
       specialRequirements,
+      createdBy: req.user._id,
     });
-    res.status(201).json({ message: "Appointment created successfully" });
+    return res
+      .status(201)
+      .json({ message: "Appointment created successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
   }
 };
