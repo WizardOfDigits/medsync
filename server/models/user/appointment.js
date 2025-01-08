@@ -1,72 +1,100 @@
 import { Schema, model } from "mongoose";
 
-const appointmentSchema = new Schema({
-  // patientId: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "user",
-  // },
-  address: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  socialSecurityNumber: {
-    type: Number,
-    required: true,
-  },
-  emergencyContactName: {
-    type: String,
-    required: true,
-  },
-  relation: {
-    type: String,
-    required: true,
-  },
-  emergencyContactPhone: {
-    type: Number,
-    required: true,
-  },
-  insuranceCompany: {
-    type: String,
-    required: true,
-  },
-  policyholdersName: {
-    type: String,
-  },
-  policyNumber: {
-    type: Number,
-  },
-  groupNumber: {
-    type: Number,
-  },
-  planName: {
-    type: String,
-  },
-  referralInformation: {
-    type: String,
-  },
-  appointmentDetails: {
-    type: String,
-    required: true,
-  },
-  ReasonForVisit: {
-    type: String,
-    required: true,
-  },
-  preferredAppointmentDate: {
+// Define appointmentDetails as a sub-schema
+const appointmentDetailsSchema = new Schema({
+  appointmentDate: {
     type: Date,
+    required: true,
   },
-  preferredPhysician: {
-    type: Schema.Types.ObjectId,
-    ref: "physician",
+  appointmentTime: {
+    type: Date,
+    required: true,
   },
-  specialRequirements: {
+  doctor: {
     type: String,
+    required: true,
+  },
+  clinic: {
+    type: String,
+    required: true,
   },
 });
+
+// Define the main appointment schema
+const appointmentSchema = new Schema(
+  {
+    address: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    socialSecurityNumber: {
+      type: String,
+      required: true,
+      match: /^[0-9]{3}-[0-9]{2}-[0-9]{4}$/, // Regex for validating SSN format
+    },
+    emergencyContactName: {
+      type: String,
+      required: true,
+    },
+    relation: {
+      type: String,
+      required: true,
+    },
+    emergencyContactPhone: {
+      type: String,
+      required: true,
+      match: /^[0-9]{10}$/,
+    },
+    insuranceCompany: {
+      type: String,
+      required: true,
+    },
+    policyholdersName: {
+      type: String,
+    },
+    policyNumber: {
+      type: String,
+    },
+    groupNumber: {
+      type: String,
+    },
+    planName: {
+      type: String,
+    },
+    referralInformation: {
+      type: String,
+    },
+    appointmentDetails: {
+      type: appointmentDetailsSchema,
+      required: true,
+    },
+    reasonForVisit: {
+      type: String,
+      required: true,
+    },
+    preferredAppointmentDate: {
+      type: Date,
+    },
+    preferredPhysician: {
+      type: Schema.Types.ObjectId,
+      ref: "physician",
+    },
+    specialRequirements: {
+      type: String,
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
 const Appointment = model("appointment", appointmentSchema);
 

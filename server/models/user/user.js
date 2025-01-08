@@ -37,6 +37,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
+      retquired: true,
       enum: ["USER", "PHYSICIAN", "ADMIN"],
       default: "USER",
     },
