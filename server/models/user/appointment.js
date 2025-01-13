@@ -51,15 +51,11 @@ const appointmentSchema = new Schema(
     },
     insuranceCompany: {
       type: String,
-      required: true,
     },
-    policyholdersName: {
+    policyholderName: {
       type: String,
     },
     policyNumber: {
-      type: String,
-    },
-    groupNumber: {
       type: String,
     },
     planName: {
@@ -78,10 +74,12 @@ const appointmentSchema = new Schema(
     },
     preferredAppointmentDate: {
       type: Date,
+      required: true,
     },
     preferredPhysician: {
       type: Schema.Types.ObjectId,
       ref: "physician",
+      required: true,
     },
     specialRequirements: {
       type: String,
