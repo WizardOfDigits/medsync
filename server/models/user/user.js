@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import bcrypt from "bcrypt";
+import { hashPassword, comparePassword } from "../../utils/passwordUtils.js";
 
 const userSchema = new Schema(
   {
@@ -37,25 +37,24 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      retquired: true,
-      enum: ["USER", "PHYSICIAN", "ADMIN"],
+      required: true,
       default: "USER",
     },
   },
   { timestamps: true },
 );
 
-// Pre save hook to hash password before saving it to the database
+// Pre-save hook to hash password
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await hashPassword(this.password);
   }
   next();
 });
 
-// compare password during login
+// Compare password during login
 userSchema.methods.comparePassword = async function (password) {
-  return bcrypt.compare(password, this.password);
+  return comparePassword(password, this.password);
 };
 
 const User = model("user", userSchema);
